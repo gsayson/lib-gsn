@@ -1,14 +1,25 @@
 import {
   isRouteErrorResponse,
   Links,
-  Meta,
+  Meta, type NavigateOptions,
   Outlet,
   Scripts,
   ScrollRestoration,
+  useHref,
+  useNavigate,
 } from "react-router";
 
 import type { Route } from "./+types/root";
 import stylesheet from "./app.css?url";
+import React from "react";
+import {NextUIProvider} from "@nextui-org/react";
+import {LGNavbar} from "~/components/pages";
+
+declare module "@react-types/shared" {
+  interface RouterConfig {
+    routerOptions: NavigateOptions;
+  }
+}
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -19,14 +30,22 @@ export const links: Route.LinksFunction = () => [
   },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+    href: "https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap",
+  },
+  {
+    rel: "stylesheet",
+    href: "https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap",
+  },
+  {
+    rel: "stylesheet",
+    href: "https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap"
   },
   { rel: "stylesheet", href: stylesheet },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={"text-foreground bg-background"}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -34,6 +53,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        <LGNavbar/>
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -43,7 +63,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  const navigate = useNavigate();
+  return <NextUIProvider navigate={(to, routerOptions) => navigate(to, routerOptions)} useHref={useHref}>
+    <Outlet />
+  </NextUIProvider>;
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
