@@ -44,6 +44,7 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  // noinspection HtmlRequiredTitleElement
   return (
     <html lang="en" className={"text-foreground bg-background"}>
       <head>

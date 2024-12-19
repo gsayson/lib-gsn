@@ -1,6 +1,4 @@
-import {Input, Pagination, Card, CardHeader, Divider, CardBody, CardFooter, Image, Link} from "@nextui-org/react";
-import {DownloadSimple, MagnifyingGlass} from "@phosphor-icons/react";
-import {Chip} from "@nextui-org/chip";
+import {Input, Pagination} from "@nextui-org/react";
 import {LGCard} from "~/components/card";
 
 export function meta() {

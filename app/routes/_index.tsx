@@ -1,5 +1,5 @@
-import {Button, Input, Link} from "@nextui-org/react";
-import {ArrowRight, Coffee, MagnifyingGlass} from "@phosphor-icons/react";
+import {Button, Link} from "@nextui-org/react";
+import {ArrowRight, Coffee} from "@phosphor-icons/react";
 import {useNavigate} from "react-router";
 
 export function meta() {
