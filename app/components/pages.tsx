@@ -68,7 +68,7 @@ export function DocDetails({state, dispatch}: { state: LGDUnification, dispatch:
       {createAutocompleteItem<LGDDocType>("Exam Papers")}
     </Autocomplete>
     <Autocomplete className="md:max-w-xs" label="Subject" variant={"bordered"} onSelectionChange={(id) => {dispatch({actionType: "subject", update: id as LGDSubject})}}>
-      {Object.values(state.level == "GCE Advanced Level" ? LGDSubjectA : LGDSubjectO).map(createAutocompleteItem)}
+      {Object.values(state.level == "GCE Advanced Level" ? LGDSubjectA : LGDSubjectO).sort().map(createAutocompleteItem)}
     </Autocomplete>
   </div>;
 }
