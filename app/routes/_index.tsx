@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <main className="flex items-center justify-center pt-16 pb-4">
       <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
-        <div className="max-w-3xl w-full space-y-6 px-4">
+        <div className="max-w-4xl w-full space-y-6 px-4">
           <p className="text-xl md:text-2xl text-default-400 dark:text-default-300 mt-8 lg:mt-12">A
           {" "}<Link isExternal showAnchorIcon href="https://gsn.bz"
                      className={"text-xl md:text-2xl"}>

@@ -15,11 +15,9 @@ export function LGCard({title, code, description, chips}: {title: string; code: 
           <DownloadSimple size={24}/>
         </Link>
       </CardHeader>
-      <Divider />
       <CardBody>
         <p>{description}</p>
       </CardBody>
-      <Divider />
       <CardFooter>
         <div className="flex gap-4">
           {chips.map((chip) => <Chip key={chip}>{chip}</Chip>)}
