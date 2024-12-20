@@ -14,7 +14,7 @@ export type LGDUnification = {
 
 export type LGDPReducerAction = {
   actionType: "search" | "level" | "doc-type" | "subject",
-  update: string | LGDLevel | LGDSubject | LGDDocType
+  update?: string | LGDLevel | LGDSubject | LGDDocType
 };
 
 function lgdReducer(state: LGDUnification, {actionType, update}: LGDPReducerAction): LGDUnification {

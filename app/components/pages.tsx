@@ -1,15 +1,16 @@
 import {Autocomplete, AutocompleteItem, Input, Navbar, NavbarBrand, NavbarContent, NavbarItem} from "@nextui-org/react";
-import type {Location} from "react-router";
+import {type Location, useFetcher} from "react-router";
 import {Link, useLocation} from "react-router";
 import {useTheme} from "@nextui-org/use-theme";
 import {MoonStars, SunDim} from "@phosphor-icons/react";
 import {ClientOnly} from "remix-utils/client-only";
-import React, {type Key} from "react";
+import React, {type ActionDispatch, useState} from "react";
 import {
   type LGDPReducerAction,
   type LGDUnification,
 } from "~/util/doc-details";
 import type {LibGSNIndex} from "~/util/search";
+import type {Key} from "@react-types/shared";
 
 function LGNavbarItem({loc, label, href}: {loc: Location, label: string, href: string}) {
   const active = href == loc.pathname
@@ -55,61 +56,51 @@ function createAutocompleteItem<T extends Key>(value: T) {
 
 export function DocDetails({state, dispatch, lgi}: {
   state: LGDUnification,
-  dispatch: React.ActionDispatch<[LGDPReducerAction]>,
+  dispatch: ActionDispatch<[LGDPReducerAction]>,
   lgi: LibGSNIndex
 }) {
-  const [currentCategory, setCurrentCategory] = React.useState<string | null>(null);
-  const [currentDocType, setCurrentDocType] = React.useState<string | null>(null);
-  const [currentSubject, setCurrentSubject] = React.useState<string | null>(null);
-  const [subDisabled, setSubDisabled] = React.useState<boolean>(false);
-  const SearchBar = () => <div className="flex flex-wrap gap-4 items-center mb-8 lg:mb-12">
-    <Input
-      label="Document title or code"
-      variant={"bordered"}
-    />
-  </div>
-  const ModifierOptions = () => <div
-    className="flex-col md:flex-row md:flex items-center justify-center md:space-y-0 space-y-4 md:space-x-4 w-full">
-    <Autocomplete className="md:max-w-xs" label="Category" variant={"bordered"}
-                  selectedKey={currentCategory}
-                  onSelectionChange={(id) => {
-                    setCurrentCategory(id as string | null);
-                    if(id == null) {
-                      setCurrentSubject(null);
-                      setSubDisabled(true);
-                    } else {
-                      setSubDisabled(false);
-                    }
-                    dispatch({actionType: "level", update: id as string});
-                  }}>
-      {lgi.categories.map((x) => x.name).sort().map(createAutocompleteItem)}
-    </Autocomplete>
-    <Autocomplete className="md:max-w-xs" label="Document type" variant={"bordered"}
-                  selectedKey={currentDocType}
-                  onSelectionChange={(id) => {
-                    setCurrentDocType(id as string | null);
-                    dispatch({actionType: "doc-type", update: id as string});
-                  }}>
-      {lgi.doctype.sort().map(createAutocompleteItem)}
-    </Autocomplete>
-    <Autocomplete className="md:max-w-xs" label={state.level == undefined ? "Select a category" : "Subject"}
-                  variant={"bordered"}
-                  selectedKey={currentSubject}
-                  isDisabled={subDisabled}
-                  onSelectionChange={(id) => {
-                    setCurrentSubject(id as string | null);
-                    dispatch({actionType: "subject", update: id as string});
-                  }}>
-      {
-        lgi.categories.filter((x) => x.name == state.level)
-          .flatMap((x) => x.subjects)
-          .map((y) => y.name)
-          .sort().map(createAutocompleteItem)
-      }
-    </Autocomplete>
-  </div>;
+  const [subDisabled, setSubDisabled] = useState<boolean>(true);
+  const [searchQuery, setSearchQuery] = React.useState("");
   return <>
-    <SearchBar/>
-    <ModifierOptions/>
+    <div className="flex flex-wrap gap-4 items-center mb-4">
+      <Input
+        label="Document title or code"
+        variant={"bordered"}
+        onValueChange={setSearchQuery}
+      />
+    </div>
+    <div
+      className="flex-col md:flex-row md:flex items-center justify-center md:space-y-0 space-y-4 md:space-x-4 w-full">
+      <Autocomplete className="md:max-w-xs" label="Category" variant={"bordered"}
+                    selectedKey={state.level}
+                    defaultItems={lgi.categories}
+                    onSelectionChange={(id) => {
+                      setSubDisabled(id == null)
+                      dispatch({actionType: "level", update: id as string});
+                    }}>
+        {(item) => <AutocompleteItem key={item.name}>{item.name}</AutocompleteItem>}
+      </Autocomplete>
+      <Autocomplete className="md:max-w-xs" label="Document type" variant={"bordered"}
+                    selectedKey={state.docType}
+                    onSelectionChange={(id) => {
+                      dispatch({actionType: "doc-type", update: id as string});
+                    }}>
+        {lgi.doctype.sort().map(createAutocompleteItem)}
+      </Autocomplete>
+      <Autocomplete className="md:max-w-xs" label={state.level == undefined ? "Select a category" : "Subject"}
+                    variant={"bordered"}
+                    selectedKey={state.subject}
+                    isDisabled={subDisabled}
+                    onSelectionChange={(id) => {
+                      dispatch({actionType: "subject", update: id as string});
+                    }}>
+        {
+          lgi.categories.filter((x) => x.name == state.level)
+            .flatMap((x) => x.subjects)
+            .map((y) => y.name)
+            .sort().map(createAutocompleteItem)
+        }
+      </Autocomplete>
+    </div>
   </>
 }
