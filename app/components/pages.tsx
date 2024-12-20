@@ -1,4 +1,4 @@
-import {Autocomplete, AutocompleteItem, Navbar, NavbarBrand, NavbarContent, NavbarItem} from "@nextui-org/react";
+import {Autocomplete, AutocompleteItem, Input, Navbar, NavbarBrand, NavbarContent, NavbarItem} from "@nextui-org/react";
 import type {Location} from "react-router";
 import {Link, useLocation} from "react-router";
 import {useTheme} from "@nextui-org/use-theme";
@@ -6,14 +6,10 @@ import {MoonStars, SunDim} from "@phosphor-icons/react";
 import {ClientOnly} from "remix-utils/client-only";
 import React, {type Key} from "react";
 import {
-  type LGDDocType,
-  type LGDLevel,
-  type LGDSubject,
-  LGDSubjectA,
-  LGDSubjectO,
+  type LGDPReducerAction,
   type LGDUnification,
-} from "~/types/doc-details";
-import type {LGDPReducerAction} from "~/routes/library";
+} from "~/util/doc-details";
+import type {LibGSNIndex} from "~/util/search";
 
 function LGNavbarItem({loc, label, href}: {loc: Location, label: string, href: string}) {
   const active = href == loc.pathname
@@ -57,18 +53,63 @@ function createAutocompleteItem<T extends Key>(value: T) {
   return <AutocompleteItem key={value}>{value}</AutocompleteItem>
 }
 
-export function DocDetails({state, dispatch}: { state: LGDUnification, dispatch: React.ActionDispatch<[LGDPReducerAction]> }) {
-  return <div className="flex-col md:flex-row md:flex items-center justify-center md:space-y-0 space-y-4 md:space-x-4 w-full">
-    <Autocomplete className="md:max-w-xs" label="Level" variant={"bordered"} onSelectionChange={(id) => {dispatch({actionType: "level", update: id as LGDLevel})}}>
-      {createAutocompleteItem<LGDLevel>("GCE Ordinary Level")}
-      {createAutocompleteItem<LGDLevel>("GCE Advanced Level")}
+export function DocDetails({state, dispatch, lgi}: {
+  state: LGDUnification,
+  dispatch: React.ActionDispatch<[LGDPReducerAction]>,
+  lgi: LibGSNIndex
+}) {
+  const [currentCategory, setCurrentCategory] = React.useState<string | null>(null);
+  const [currentDocType, setCurrentDocType] = React.useState<string | null>(null);
+  const [currentSubject, setCurrentSubject] = React.useState<string | null>(null);
+  const [subDisabled, setSubDisabled] = React.useState<boolean>(false);
+  const SearchBar = () => <div className="flex flex-wrap gap-4 items-center mb-8 lg:mb-12">
+    <Input
+      label="Document title or code"
+      variant={"bordered"}
+    />
+  </div>
+  const ModifierOptions = () => <div
+    className="flex-col md:flex-row md:flex items-center justify-center md:space-y-0 space-y-4 md:space-x-4 w-full">
+    <Autocomplete className="md:max-w-xs" label="Category" variant={"bordered"}
+                  selectedKey={currentCategory}
+                  onSelectionChange={(id) => {
+                    setCurrentCategory(id as string | null);
+                    if(id == null) {
+                      setCurrentSubject(null);
+                      setSubDisabled(true);
+                    } else {
+                      setSubDisabled(false);
+                    }
+                    dispatch({actionType: "level", update: id as string});
+                  }}>
+      {lgi.categories.map((x) => x.name).sort().map(createAutocompleteItem)}
     </Autocomplete>
-    <Autocomplete className="md:max-w-xs" label="Document type" variant={"bordered"} onSelectionChange={(id) => {dispatch({actionType: "doc-type", update: id as LGDDocType})}}>
-      {createAutocompleteItem<LGDDocType>("Notes & Supplements")}
-      {createAutocompleteItem<LGDDocType>("Exam Papers")}
+    <Autocomplete className="md:max-w-xs" label="Document type" variant={"bordered"}
+                  selectedKey={currentDocType}
+                  onSelectionChange={(id) => {
+                    setCurrentDocType(id as string | null);
+                    dispatch({actionType: "doc-type", update: id as string});
+                  }}>
+      {lgi.doctype.sort().map(createAutocompleteItem)}
     </Autocomplete>
-    <Autocomplete className="md:max-w-xs" label="Subject" variant={"bordered"} onSelectionChange={(id) => {dispatch({actionType: "subject", update: id as LGDSubject})}}>
-      {Object.values(state.level == "GCE Advanced Level" ? LGDSubjectA : LGDSubjectO).sort().map(createAutocompleteItem)}
+    <Autocomplete className="md:max-w-xs" label={state.level == undefined ? "Select a category" : "Subject"}
+                  variant={"bordered"}
+                  selectedKey={currentSubject}
+                  isDisabled={subDisabled}
+                  onSelectionChange={(id) => {
+                    setCurrentSubject(id as string | null);
+                    dispatch({actionType: "subject", update: id as string});
+                  }}>
+      {
+        lgi.categories.filter((x) => x.name == state.level)
+          .flatMap((x) => x.subjects)
+          .map((y) => y.name)
+          .sort().map(createAutocompleteItem)
+      }
     </Autocomplete>
   </div>;
+  return <>
+    <SearchBar/>
+    <ModifierOptions/>
+  </>
 }
