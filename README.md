@@ -1,18 +1,15 @@
-# Welcome to React Router!
+# LibGSN
 
-A modern, production-ready template for building full-stack React applications using React Router.
+The web interface for the LibGSN web repository. Runs on an S3 backend.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## Environment variables
 
-## Features
-
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+- `S3_HOST` is the host URL, for example `https://abc.digitaloceanspaces.com/`.
+- `S3_ACCESS_KEY_ID` is the access key ID.
+- `S3_SECRET` is the secret key to use the S3 service.
+- `S3_REGION` is the bucket region.
+- `S3_BUCKET_NAME` is self-explanatory.
+- `DATABASE_URL` is the URL for the PostgreSQL database. Further information is provided later.
 
 ## Getting Started
 
@@ -21,7 +18,7 @@ A modern, production-ready template for building full-stack React applications u
 Install the dependencies:
 
 ```bash
-npm install
+bun install
 ```
 
 ### Development
@@ -29,7 +26,7 @@ npm install
 Start the development server with HMR:
 
 ```bash
-npm run dev
+bun run dev
 ```
 
 Your application will be available at `http://localhost:5173`.
@@ -39,7 +36,7 @@ Your application will be available at `http://localhost:5173`.
 Create a production build:
 
 ```bash
-npm run build
+bun run build
 ```
 
 ## Deployment

@@ -1,9 +1,11 @@
-import {Alert, Input, Pagination} from "@nextui-org/react";
-import {LGCard, LGSearchResultList} from "~/components/listing";
-import {DocDetails} from "~/components/pages";
-import {useDDReducer} from "~/util/doc-details";
-import {getIndex, getShadows} from "~/util/search";
-import {useFetcher, useLoaderData} from "react-router";
+import {Alert, Button, Divider, Pagination} from "@nextui-org/react";
+import {LGSearchResultList} from "~/components/listing";
+import {type LGDUnification, useDDReducer} from "~/util/doc-details";
+import {getIndex} from "~/server/search";
+import {useLoaderData} from "react-router";
+import {useEffect, useState} from "react";
+import {ClientOnly} from "remix-utils/client-only";
+import {DocDetails} from "~/components/search";
 
 export function meta() {
   return [
@@ -14,32 +16,43 @@ export function meta() {
 
 export async function loader() {
   return {
-    index: await getIndex(),
-    shadows: await getShadows()
+    index: await getIndex()
   };
 }
 
 export default function Library() {
   const [state, dispatch] = useDDReducer();
-  let { index, shadows } = useLoaderData<typeof loader>();
+  const [newQuery, setNewQuery] = useState<LGDUnification>(state);
+  let { index } = useLoaderData<typeof loader>();
   if(index == undefined) {
     index = {
       categories: [],
       doctype: []
     };
   }
-  return <main className="flex items-center justify-center pt-16 pb-4">
-    <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
-      <div className="max-w-3xl lg:max-w-4xl w-full space-y-6 px-4">
-        <h1 className={"text-4xl md:text-6xl mt-2 lg:mt-4 font-serif"}>What will you ace next?</h1>
-        <DocDetails state={state} dispatch={dispatch} lgi={index}/>
-        <div className="flex items-center justify-center w-full">
-          <Alert description={"All documents stored in LibGSN are the property of Gerard Sayson."} title={"Copyright notice"}/>
-        </div>
-        <LGSearchResultList state={state}/>
-        <div className="flex flex-wrap gap-4 justify-center w-full items-center mb-8 lg:mb-12">
-          <Pagination isCompact showControls initialPage={1} total={10}/>
-        </div>
+  return <main className="flex items-center justify-center pt-16 pb-4 gap-16 min-h-0">
+    <div className="max-w-3xl lg:max-w-4xl w-full space-y-6 px-4">
+      <h1 className={"text-4xl md:text-6xl mt-2 lg:mt-4 font-serif"}>What will you ace next?</h1>
+      <div className="lg:flex gap-4 w-full space-y-6 lg:space-y-0 lg:space-x-4">
+        <search className={"w-full lg:max-w-xs"}>
+          <DocDetails state={state} dispatch={dispatch} lgi={index}/>
+          <div className={"w-full space-y-4"}>
+            <Button className={"font-bold w-full"} color={"primary"}
+                    onPress={() => setNewQuery(state)}>Submit search query</Button>
+            <Button className={"font-bold w-full"} color={"primary"} variant={"bordered"}
+                    onPress={() => {
+                    }}>Support LibGSN</Button>
+          </div>
+          <div className="flex items-center justify-center w-full my-4">
+            <Alert
+              description={"It costs money and time to maintain LibGSN and its repository of notes. I'd greatly appreciate a donation!"}
+              title={"Help support LibGSN!"}
+            />
+          </div>
+        </search>
+        <section className={"space-y-4 w-full max-w-3xl"}>
+          <ClientOnly>{() => <LGSearchResultList state={newQuery} index={index}/>}</ClientOnly>
+        </section>
       </div>
     </div>
   </main>;

@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/lib-gsn.iml" filepath="$PROJECT_DIR$/.idea/lib-gsn.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../libgsn/.idea/libgsn.iml" filepath="$PROJECT_DIR$/../libgsn/.idea/libgsn.iml" />
     </modules>
   </component>
 </project>

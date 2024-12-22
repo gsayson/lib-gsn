@@ -17,6 +17,34 @@ export type LGDPReducerAction = {
   update?: string | LGDLevel | LGDSubject | LGDDocType
 };
 
+// Please ensure that you do not send this over JSON!
+export type LibGSNIndex = {
+  categories: {
+    name: string,
+    key: string,
+    subjects: {
+      name: string,
+      code: string[]
+    }[]
+  }[],
+  doctype: {
+    name: string,
+    code: number
+  }[],
+}
+
+export type LibGSNShadow = {
+  doc_code: string, // not following JS conventions, but the db
+  name: string,
+  year: number,
+  subject: string,
+  pointer: string,
+  doc_type: number,
+  category: string,
+  last_updated: Date,
+  desc: string,
+}
+
 function lgdReducer(state: LGDUnification, {actionType, update}: LGDPReducerAction): LGDUnification {
   switch(actionType) {
     case "search": {
@@ -62,3 +90,20 @@ export function useDDReducer() {
     subject: undefined
   } as LGDUnification);
 }
+
+export function resolveDocTypeNumerical(numeric: number, index: LibGSNIndex): string {
+  return index.doctype.find((c) => c.code == numeric)?.name!;
+}
+
+export function resolveDocTypeName(name: string, index: LibGSNIndex): number {
+  return index.doctype.find((c) => c.name == name)?.code!;
+}
+
+export function resolveCategoryKey(key: string, index: LibGSNIndex): string {
+  return index.categories.find((c) => c.key == key)?.name!
+}
+
+export function resolveCategoryName(name: string, index: LibGSNIndex): string {
+  return index.categories.find((c) => c.name == name)?.key!
+}
+
