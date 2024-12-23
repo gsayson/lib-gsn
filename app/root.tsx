@@ -1,11 +1,12 @@
 import {
+  data,
   isRouteErrorResponse,
-  Links,
+  Links, type LoaderFunctionArgs,
   Meta, type NavigateOptions,
   Outlet,
   Scripts,
   ScrollRestoration,
-  useHref,
+  useHref, useLoaderData,
   useNavigate,
 } from "react-router";
 
@@ -14,8 +15,11 @@ import stylesheet from "./app.css?url";
 import React from "react";
 import {NextUIProvider} from "@nextui-org/react";
 import {LGNavbar} from "~/components/pages";
+import {csrf} from "~/server/csrf";
+import {AuthenticityTokenProvider} from "remix-utils/csrf/react";
 
 declare module "@react-types/shared" {
+  // noinspection JSUnusedGlobalSymbols
   interface RouterConfig {
     routerOptions: NavigateOptions;
   }
@@ -43,6 +47,14 @@ export const links: Route.LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
 ];
 
+export async function loader({ request }: LoaderFunctionArgs) {
+  let [token, cookieHeader] = await csrf.commitToken();
+  // return json({ token }, { headers: { "set-cookie": cookieHeader } });
+  return data({ token }, {
+    headers: [["Set-Cookie", cookieHeader!]],
+  })
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
   // noinspection HtmlRequiredTitleElement
   return (
@@ -64,10 +76,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  let { token } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
-  return <NextUIProvider navigate={(to, routerOptions) => navigate(to, routerOptions)} useHref={useHref}>
-    <Outlet />
-  </NextUIProvider>;
+  return (
+    <AuthenticityTokenProvider token={token}>
+      <NextUIProvider navigate={(to, routerOptions) => navigate(to, routerOptions)} useHref={useHref}>
+        <Outlet/>
+      </NextUIProvider>
+    </AuthenticityTokenProvider>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
