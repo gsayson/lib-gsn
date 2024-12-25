@@ -1,4 +1,4 @@
-import {GetObjectCommand, S3Client} from "@aws-sdk/client-s3";
+import {GetObjectCommand} from "@aws-sdk/client-s3";
 import {
   type LGDUnification,
   type LibGSNIndex,
@@ -6,23 +6,11 @@ import {
   resolveCategoryName,
   resolveDocTypeName,
 } from "~/util/doc-details";
-import postgres from "postgres";
-
-const s3 = new S3Client({
-  endpoint: process.env.S3_HOST!,
-  forcePathStyle: false,
-  region: process.env.S3_REGION!,
-  credentials: {
-    accessKeyId: process.env.S3_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.S3_SECRET!
-  }
-})
-
-const sql = postgres(process.env.DATABASE_URL!, { ssl: 'require' });
+import {lgS3Client, sql} from "~/server/data-sources";
 
 export async function getIndex() {
   try {
-    const output = await s3.send(new GetObjectCommand({
+    const output = await lgS3Client.send(new GetObjectCommand({
       Bucket: process.env.S3_BUCKET_NAME!,
       Key: "index/libgsn.json"
     }));
@@ -43,7 +31,7 @@ export async function getShadows(
         name LIKE ${"%" + (query.search ?? "") + "%"}
         ${query.level != undefined ? sql`AND category = ${resolveCategoryName(query.level, index)}` : sql``} 
         ${query.subject != undefined ? sql`AND subject = ${query.subject}` : sql``}
-        ${query.docType != undefined ? sql`AND docType = ${resolveDocTypeName(query.docType, index)}` : sql``}
+        ${query.docType != undefined ? sql`AND doc_type = ${resolveDocTypeName(query.docType, index)}` : sql``}
         ORDER BY last_updated DESC`
     return output.map((x) => x as LibGSNShadow)
   } catch (err) {

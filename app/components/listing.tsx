@@ -16,7 +16,7 @@ export function LGCard(
     subject,
     lastUpdated,
     category,
-    pointer,
+    url,
   }: {
     title: string,
     code: string,
@@ -26,7 +26,7 @@ export function LGCard(
     subject: string,
     lastUpdated: string,
     category: string,
-    pointer: string
+    url: string
   },
 ) {
   return (
@@ -37,7 +37,7 @@ export function LGCard(
           <p className="text-md font-bold">{title}</p>
           <p className="text-small text-default-500">{subject}</p>
         </div>
-        <Link className="mr-2 hover:text-primary transition" to={`/library/${code}`}>
+        <Link className="mr-2 hover:text-primary transition" to={url}>
           <DownloadSimple size={24}/>
         </Link>
       </CardHeader>
@@ -47,7 +47,7 @@ export function LGCard(
       </CardBody>
       <CardFooter>
         <div className="gap-2">
-          <p className="text-xs text-default-500 font-bold">{doctype}</p>
+          <p className="text-xs text-default-500 font-bold">{code} &bull; {doctype}</p>
           <p className="text-xs text-default-500">Last updated {lastUpdated}</p>
         </div>
       </CardFooter>
@@ -55,7 +55,7 @@ export function LGCard(
   )
 }
 
-export function LGSearchResultList({state, index}: {state: LGDUnification, index: LibGSNIndex}) {
+export function LGSearchResultList({state, index, cdnBase}: {state: LGDUnification, index: LibGSNIndex, cdnBase: string}) {
   const fetcher = useFetcher<typeof loader>();
   // We're stuck with this because React will complain if we use `useMemo`; it probably gets executed on the server.
   const [promise, setPromise] = useState<Promise<void>>()
@@ -85,10 +85,10 @@ export function LGSearchResultList({state, index}: {state: LGDUnification, index
               subject={item.subject}
               lastUpdated={item.last_updated.toString()}
               category={resolveCategoryKey(item.category, index)}
-              pointer={item.pointer}
+              url={`${cdnBase.padEnd(1, "/")}files/${item.pointer.trim()}.pdf`}
             />)
           return k.length == 0 ? <EmptyList/> : <>
-            <h2 className={"text-xl md:text-2xl font-bold"}>{fetcher.data?.length ?? 0} results found</h2>
+            <h2 className={"text-xl md:text-2xl font-bold"}>{fetcher.data?.length ?? 0} result(s) found</h2>
             {k}
             <div className="flex flex-wrap gap-4 justify-center w-full items-center mb-8 lg:mb-12" key={"pagination"}>
               <Pagination isCompact showControls initialPage={page} onChange={(page) => {

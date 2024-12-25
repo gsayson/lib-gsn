@@ -5,8 +5,8 @@ export type LGDLevel = string;
 export type LGDDocType = string;
 export type LGDSubject = string;
 
-export type LGDUnification = {
-  search?: string;
+export interface LGDUnification {
+  search?: string,
   level?: LGDLevel,
   docType?: LGDDocType,
   subject?: LGDSubject,
@@ -18,7 +18,7 @@ export type LGDPReducerAction = {
 };
 
 // Please ensure that you do not send this over JSON!
-export type LibGSNIndex = {
+export interface LibGSNIndex {
   categories: {
     name: string,
     key: string,
@@ -33,7 +33,7 @@ export type LibGSNIndex = {
   }[],
 }
 
-export type LibGSNShadow = {
+export interface LibGSNShadow {
   doc_code: string, // not following JS conventions, but the db
   name: string,
   year: number,

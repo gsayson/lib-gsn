@@ -1,9 +1,9 @@
-import {Alert, Button, Divider, Pagination} from "@nextui-org/react";
+import {Alert, Button} from "@nextui-org/react";
 import {LGSearchResultList} from "~/components/listing";
 import {type LGDUnification, useDDReducer} from "~/util/doc-details";
 import {getIndex} from "~/server/search";
 import {useLoaderData} from "react-router";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {ClientOnly} from "remix-utils/client-only";
 import {DocDetails} from "~/components/search";
 
@@ -16,14 +16,15 @@ export function meta() {
 
 export async function loader() {
   return {
-    index: await getIndex()
+    index: await getIndex(),
+    cdnBase: process.env.S3_CDN_HOST!
   };
 }
 
 export default function Library() {
   const [state, dispatch] = useDDReducer();
   const [newQuery, setNewQuery] = useState<LGDUnification>(state);
-  let { index } = useLoaderData<typeof loader>();
+  let { index, cdnBase } = useLoaderData<typeof loader>();
   if(index == undefined) {
     index = {
       categories: [],
@@ -32,7 +33,7 @@ export default function Library() {
   }
   return <main className="flex items-center justify-center pt-16 pb-4 gap-16 min-h-0">
     <div className="max-w-3xl lg:max-w-4xl w-full space-y-6 px-4">
-      <h1 className={"text-4xl md:text-6xl mt-2 lg:mt-4 font-serif"}>What will you ace next?</h1>
+      <h1 className={"text-4xl md:text-6xl mt-2 lg:mt-4 mb-8 font-serif"}>What will you ace next?</h1>
       <div className="lg:flex gap-4 w-full space-y-6 lg:space-y-0 lg:space-x-4">
         <search className={"w-full lg:max-w-xs"}>
           <DocDetails state={state} dispatch={dispatch} lgi={index}/>
@@ -51,7 +52,7 @@ export default function Library() {
           </div>
         </search>
         <section className={"space-y-4 w-full max-w-3xl"}>
-          <ClientOnly>{() => <LGSearchResultList state={newQuery} index={index}/>}</ClientOnly>
+          <ClientOnly>{() => <LGSearchResultList state={newQuery} index={index} cdnBase={cdnBase}/>}</ClientOnly>
         </section>
       </div>
     </div>

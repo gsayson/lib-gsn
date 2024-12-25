@@ -31,7 +31,7 @@ export function LGNavbar() {
     <NavbarContent className="hidden sm:flex gap-4" justify="center">
       <LGNavbarItem loc={location} label={"Home"} href={"/"}/>
       <LGNavbarItem loc={location} label={"Library"} href={"/library"}/>
-      <LGNavbarItem loc={location} label={"About"} href={"/about"}/>
+      <LGNavbarItem loc={location} label={"Portal"} href={"/portal"}/>
     </NavbarContent>
     <NavbarContent justify="end">
       <NavbarItem className="flex">
