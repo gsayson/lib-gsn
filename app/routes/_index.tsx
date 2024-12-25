@@ -1,4 +1,4 @@
-import {Button, Link} from "@nextui-org/react";
+import {Button, Divider, Link} from "@nextui-org/react";
 import {ArrowRight, Coffee} from "@phosphor-icons/react";
 import {useNavigate} from "react-router";
 
@@ -13,7 +13,7 @@ export default function Home() {
   const navigate = useNavigate();
   return (
     <main className="flex items-center justify-center pt-16 pb-4 gap-16 min-h-0">
-      <section className="max-w-3xl lg:max-w-4xl w-full space-y-6 px-4">
+      <div className="max-w-3xl lg:max-w-4xl w-full space-y-6 px-4">
         <p className="text-xl md:text-2xl text-default-400 dark:text-default-300 mt-8 lg:mt-12">A
           {" "}<Link isExternal showAnchorIcon href="https://gsn.bz"
                      className={"text-xl md:text-2xl"}>
@@ -29,17 +29,45 @@ export default function Home() {
                                 href={"https://www.youtube.com/watch?v=4lL98QSR-E4"}>actual song lyric</Link>, by the way)
         </p>
         <p className="text-xl md:text-2xl font-semibold">Welcome to LibGSN, the repository of Gerard&apos;s notes.</p>
-        <div className="flex flex-wrap gap-4 items-center mb-8 lg:mb-12">
+        <div className="flex flex-wrap gap-4 items-center">
           <Button color="primary" variant="solid" endContent={<ArrowRight/>} onPress={() => {
             navigate("/library")
           }} className={"font-bold"}>
             Enter the Library
           </Button>
-          <Button color="primary" variant="bordered" endContent={<Coffee/>} className={"font-bold"}>
+          <Button color="primary" variant="bordered" endContent={<Coffee/>} className={"font-bold"} isDisabled>
             Buy me a coffee!
           </Button>
         </div>
-      </section>
+        <Divider/>
+        <p>LibGSN is a repository of my notes and past exams for those who truly want to learn, work and succeed.
+        The Library provides a search function to look up notes and examinations for particular subjects.</p>
+        <p>
+          This project initially appeared due to being unable to re-upload my notes on one particular website,
+          whenever I discovered a flaw or typo, and also because of my dissatisfaction with the scarcity of
+          resources online &ndash; gate-kept, hidden, and hard to find for those who really want to learn.
+        </p>
+        <p>
+          Currently, only I can upload my notes through the <em>portal</em>. In the future I plan to invite more
+          people to publish their notes and questions.
+        </p>
+        <Divider/>
+        <section className={"text-sm text-default-400 dark:text-default-300 space-y-2"}>
+          <p>I believe in open-source, so you can find the source code on my GitHub.</p>
+          <p>
+            This program is free software: you can redistribute it and/or modify
+            it under the terms of the GNU Affero General Public License as
+            published by the Free Software Foundation, either version 3 of the
+            License, or (at your option) any later version.
+          </p>
+          <p>
+            This program is distributed in the hope that it will be useful,
+            but WITHOUT ANY WARRANTY; without even the implied warranty of
+            MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+            GNU Affero General Public License for more details.
+          </p>
+        </section>
+      </div>
     </main>
   );
 }

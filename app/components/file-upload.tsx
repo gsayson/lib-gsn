@@ -11,7 +11,7 @@ import {
 import type {LibGSNIndex} from "~/util/doc-details";
 import {useState} from "react";
 import {AuthenticityTokenInput} from "remix-utils/csrf/react";
-import {useFetcher, useSubmit} from "react-router";
+import {useFetcher} from "react-router";
 
 export function FileUploadModal({ index }: { index: LibGSNIndex}) {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();

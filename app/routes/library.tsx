@@ -41,13 +41,13 @@ export default function Library() {
             <Button className={"font-bold w-full"} color={"primary"}
                     onPress={() => setNewQuery(state)}>Submit search query</Button>
             <Button className={"font-bold w-full"} color={"primary"} variant={"bordered"}
-                    onPress={() => {
-                    }}>Support LibGSN</Button>
+                    isDisabled>Support LibGSN</Button>
           </div>
           <div className="flex items-center justify-center w-full my-4">
             <Alert
-              description={"It costs money and time to maintain LibGSN and its repository of notes. I'd greatly appreciate a donation!"}
-              title={"Help support LibGSN!"}
+              description={"It costs money and time to maintain LibGSN and its repository of notes. Please consider support me " +
+                "when I configure a 'buy me a coffee' link!"}
+              title={"Help support LibGSN (soon)!"}
             />
           </div>
         </search>

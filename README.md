@@ -1,15 +1,18 @@
 # LibGSN
 
-The web interface for the LibGSN web repository. Runs on an S3 backend.
+The web interface for the LibGSN web repository. Runs on an S3 backend and a PostgreSQL database.
 
 ## Environment variables
 
 - `S3_HOST` is the host URL, for example `https://abc.digitaloceanspaces.com/`.
+- `S3_CDN_HOST` is the CDN host URL, for example `https://<bucket-name>.<provider>/`.
 - `S3_ACCESS_KEY_ID` is the access key ID.
 - `S3_SECRET` is the secret key to use the S3 service.
 - `S3_REGION` is the bucket region.
 - `S3_BUCKET_NAME` is self-explanatory.
 - `DATABASE_URL` is the URL for the PostgreSQL database. Further information is provided later.
+- `CSRF_SECRET` is the secret that CSRF cookies will be signed with.
+- `COOKIE_SIGN` is the secret that session ID cookies will be signed with.
 
 ## Getting Started
 
@@ -88,9 +91,29 @@ Make sure to deploy the output of `npm run build`
 │   └── server/    # Server-side code
 ```
 
-## Styling
+## Database setup
+I'll make a separate folder for the needed SQL scripts soon.
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+## S3 setup
+Your S3 should contain `index/index.json` which follows the following schema:
+```ts
+interface LibGSNIndex {
+  categories: {
+    name: string,
+    key: string,
+    subjects: {
+      name: string,
+      code: string[]
+    }[]
+  }[],
+  doctype: {
+    name: string,
+    code: number
+  }[],
+}
+```
+
+There should also be an empty `files/` directory, which is where the files are stored.
 
 ---
 
