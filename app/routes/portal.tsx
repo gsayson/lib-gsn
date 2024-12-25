@@ -4,7 +4,7 @@ import {type LGDUnification, type LibGSNIndex, useDDReducer} from "~/util/doc-de
 import {useState} from "react";
 import {DocDetails} from "~/components/search";
 import {getIndex} from "~/server/search";
-import {FileUploadModal} from "~/components/portal-management";
+import {FileUploadModal} from "~/components/file-upload";
 import {commitSession, getSession, NULL_SVR, validateSessionObject} from "~/server/session";
 import type {Route} from "../../.react-router/types/app/routes/+types/portal";
 

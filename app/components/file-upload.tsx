@@ -11,13 +11,12 @@ import {
 import type {LibGSNIndex} from "~/util/doc-details";
 import {useState} from "react";
 import {AuthenticityTokenInput} from "remix-utils/csrf/react";
-import {useSubmit} from "react-router";
+import {useFetcher, useSubmit} from "react-router";
 
 export function FileUploadModal({ index }: { index: LibGSNIndex}) {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [currentCategory, setCurrentCategory] = useState<string | undefined>()
-  const submit = useSubmit();
-  // Oh, h*ll no
+  const fetcher = useFetcher();
   return (
     <>
       <Button color="primary" onPress={onOpen} className={"font-bold w-full"}>
@@ -26,12 +25,11 @@ export function FileUploadModal({ index }: { index: LibGSNIndex}) {
       <Modal isOpen={isOpen} placement="top-center" onOpenChange={onOpenChange} backdrop={"blur"} isDismissable={false}>
         <Form validationBehavior={"native"}
         action={async (e) => {
-          await submit(e, {
+          await fetcher.submit(e, {
             method: "post",
             encType: "multipart/form-data",
             action: "/science/upload",
-            navigate: false,
-            preventScrollReset: true
+            preventScrollReset: true,
           });
         }}>
           <ModalContent>
@@ -76,9 +74,8 @@ export function FileUploadModal({ index }: { index: LibGSNIndex}) {
                     isRequired variant={"bordered"}
                     label={"Category"} name={"category"}
                     isClearable={false}
-                    selectedKey={currentCategory}
                     onSelectionChange={(e) => setCurrentCategory(e as string | undefined)}
-                    items={index.categories.map((x) => x.name)
+                    defaultItems={index.categories.map((x) => x.name)
                       .sort()
                       .map((x) => ({name: x}))}>
                     {(x) => <AutocompleteItem key={x.name}>{x.name}</AutocompleteItem>}
@@ -87,7 +84,7 @@ export function FileUploadModal({ index }: { index: LibGSNIndex}) {
                     isRequired variant={"bordered"}
                     label={"Document type"} name={"doctype"}
                     isClearable={false}
-                    items={index.doctype.map((x) => x.name)
+                    defaultItems={index.doctype.map((x) => x.name)
                       .sort()
                       .map((x) => ({name: x}))}>
                     {(x) => <AutocompleteItem key={x.name}>{x.name}</AutocompleteItem>}
@@ -97,9 +94,9 @@ export function FileUploadModal({ index }: { index: LibGSNIndex}) {
                     label={"Subject"} name={"subject"}
                     isClearable={false}
                     listboxProps={{
-                      emptyContent: "Select a category!"
+                      emptyContent: "Select a category!",
                     }}
-                    items={index.categories.filter((x) => x.name === currentCategory)
+                    defaultItems={index.categories.filter((x) => x.name === currentCategory)
                       .flatMap((x) => x.subjects)
                       .map((x) => x.name) // have to do this or TS complains
                       .sort()
@@ -108,6 +105,7 @@ export function FileUploadModal({ index }: { index: LibGSNIndex}) {
                       }))}>
                     {(x) => <AutocompleteItem key={x.name}>{x.name}</AutocompleteItem>}
                   </Autocomplete>
+                  {fetcher.data && fetcher.data.message != "success" && <p>{fetcher.data.message}</p>}
                   <AuthenticityTokenInput/>
                 </ModalBody>
                 <ModalFooter>

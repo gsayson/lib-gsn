@@ -112,6 +112,18 @@ export async function action({ request }: Route.ActionArgs) {
       ]
     });
     const index = (await getIndex())!;
+    // check if document exists
+    if((await sql`SELECT EXISTS(SELECT * FROM lg_shadows WHERE doc_code = ${paramParsed.code!})`)[0].exists) {
+      return Response.json({
+        success: false,
+        message: "document-already-exists"
+      } as APIResponse, {
+        status: 409, // conflict
+        headers: [
+          ["Set-Cookie", await commitSession(sessionData)]
+        ]
+      });
+    }
     // now safe to work with file upload, user has been checked
     // (1) register file in postgres
     // (2) actually upload file
