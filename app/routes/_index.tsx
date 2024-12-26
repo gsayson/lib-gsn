@@ -53,7 +53,7 @@ export default function Home() {
         </p>
         <Divider/>
         <section className={"text-sm text-default-400 dark:text-default-300 space-y-2"}>
-          <p>I believe in open-source, so you can find the source code on my GitHub.</p>
+          <p>I believe in open-source, so you can find the source code to this website/program on my GitHub.</p>
           <p>
             This program is free software: you can redistribute it and/or modify
             it under the terms of the GNU Affero General Public License as
