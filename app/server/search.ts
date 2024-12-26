@@ -20,11 +20,10 @@ export async function getIndex() {
   }
 }
 
-const index = (await getIndex())!;
-
 export async function getShadows(
   query: LGDUnification = {search: undefined, level: undefined, docType: undefined, subject: undefined}
 ) {
+  const index = (await getIndex())!;
   try {
     const output= await sql`
       SELECT * FROM lg_shadows WHERE
