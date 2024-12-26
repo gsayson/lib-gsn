@@ -14,7 +14,7 @@ export function DocDetails({state, dispatch, lgi}: {
 }) {
   return <div className="flex flex-wrap gap-4 items-center mb-4">
     <Input
-      label="Search query"
+      label="Document name"
       variant={"bordered"}
       onValueChange={(id) => dispatch({actionType: "search", update: id as string})}
     />

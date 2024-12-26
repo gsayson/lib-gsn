@@ -47,23 +47,35 @@ export default function Home() {
           resources online &ndash; gate-kept, hidden, and hard to find for those who really want to learn.
         </p>
         <p>
-          Currently, only I can upload my notes through the <em>portal</em>. In the future I plan to invite more
-          people to publish their notes and questions.
+          I hope that the resources published here may help you on your academic journey. Good luck!
         </p>
         <Divider/>
         <section className={"text-sm text-default-400 dark:text-default-300 space-y-2"}>
-          <p>I believe in open-source, so you can find the source code to this website/program on my GitHub.</p>
+          <p>You can access the source code to this website ("program")
+            {" "}<Link className={"text-sm"} isExternal href={"https://github.com/gsayson/lib-gsn"}>here</Link>
+            {" "}at no cost.</p>
           <p>
             This program is free software: you can redistribute it and/or modify
-            it under the terms of the GNU Affero General Public License as
-            published by the Free Software Foundation, either version 3 of the
+            it under the terms of the
+            {" "}<Link className={"text-sm"} isExternal href={"https://www.gnu.org/licenses/agpl-3.0.html"}>
+              GNU Affero General Public License
+            </Link>
+            {" "}as published by the Free Software Foundation, either version 3 of the
             License, or (at your option) any later version.
           </p>
           <p>
-            This program is distributed in the hope that it will be useful,
-            but WITHOUT ANY WARRANTY; without even the implied warranty of
-            MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+            <span className={"font-bold"}>
+              This program is distributed in the hope that it will be useful,
+              but WITHOUT ANY WARRANTY; without even the implied warranty of
+              MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+            </span> See the
             GNU Affero General Public License for more details.
+          </p>
+          <p>
+            The documents available in LibGSN are available under the
+            {" "}<Link className={"text-sm"} isExternal
+                       href={"https://creativecommons.org/licenses/by-nc-sa/4.0/"}>CC-BY-NC-SA</Link>
+            {" "}license as published by Creative Commons, unless otherwise stated.
           </p>
         </section>
       </div>
