@@ -1,5 +1,4 @@
 import {Button, Divider, Link} from "@nextui-org/react";
-import {ArrowRight, Coffee} from "@phosphor-icons/react";
 import {useNavigate} from "react-router";
 
 export function meta() {
@@ -30,12 +29,12 @@ export default function Home() {
         </p>
         <p className="text-xl md:text-2xl font-semibold">Welcome to LibGSN, the repository of Gerard&apos;s notes.</p>
         <div className="flex flex-wrap gap-4 items-center">
-          <Button color="primary" variant="solid" endContent={<ArrowRight/>} onPress={() => {
+          <Button color="primary" variant="solid" onPress={() => {
             navigate("/library")
           }} className={"font-bold"}>
             Enter the Library
           </Button>
-          <Button color="primary" variant="bordered" endContent={<Coffee/>} className={"font-bold"} isDisabled>
+          <Button color="primary" variant="bordered" className={"font-bold"} isDisabled>
             Buy me a coffee!
           </Button>
         </div>

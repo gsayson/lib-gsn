@@ -1,7 +1,7 @@
 import {Navbar, NavbarBrand, NavbarContent, NavbarItem} from "@nextui-org/react";
 import {Link, type Location, useLocation} from "react-router";
 import {useTheme} from "@nextui-org/use-theme";
-import {MoonStars, SunDim} from "@phosphor-icons/react";
+import {MoonIcon, SunIcon} from "@radix-ui/react-icons";
 import React from "react";
 import {ClientOnly} from "remix-utils/client-only";
 
@@ -18,7 +18,7 @@ function DarkModeToggle() {
   const {theme, setTheme} = useTheme()
   const nextTheme = theme == "dark" ? "light" : "dark";
   return <button onClick={() => setTheme(nextTheme)}>
-    {theme == "dark" ? <MoonStars size={24} weight={"fill"}/> : <SunDim size={24}/>}
+    {theme == "dark" ? <MoonIcon/> : <SunIcon/>}
   </button>;
 }
 

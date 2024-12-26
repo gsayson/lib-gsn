@@ -1,5 +1,5 @@
 import {Card, CardBody, CardFooter, CardHeader, Divider, Pagination} from "@nextui-org/react";
-import {DownloadSimple} from "@phosphor-icons/react";
+import {DownloadIcon} from "@radix-ui/react-icons";
 import {Await, Link, useFetcher} from "react-router";
 import {type LGDUnification, type LibGSNIndex, resolveCategoryKey, resolveDocTypeNumerical} from "~/util/doc-details";
 import {Suspense, useEffect, useState} from "react";
@@ -38,7 +38,7 @@ export function LGCard(
           <p className="text-small text-default-500">{subject}</p>
         </div>
         <Link className="mr-2 hover:text-primary transition" to={url}>
-          <DownloadSimple size={24}/>
+          <DownloadIcon/>
         </Link>
       </CardHeader>
       <Divider/>

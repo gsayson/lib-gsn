@@ -1,6 +1,6 @@
 import {Alert, Button, Form, Input} from "@nextui-org/react";
 import {type FormEvent, useState} from "react";
-import {Eye, EyeSlash} from "@phosphor-icons/react";
+import {EyeOpenIcon, EyeClosedIcon} from "@radix-ui/react-icons";
 import {AuthenticityTokenInput} from "remix-utils/csrf/react";
 import type {Route} from "../../.react-router/types/app/routes/+types/portal";
 import {
@@ -63,9 +63,6 @@ export default function Authentication() {
   const {error} = useLoaderData<typeof loader>() as {error: any}; // it cannot be the other type, else we wouldn't be here
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  }
   return (
     <main className="flex items-center justify-center pt-16 pb-4 gap-16 min-h-0">
       <section className="w-full px-4 max-w-md">
@@ -84,9 +81,9 @@ export default function Authentication() {
             endContent={
               <button type="button" onClick={toggleVisibility}>
                 {isVisible ? (
-                  <Eye/>
+                  <EyeOpenIcon/>
                 ) : (
-                  <EyeSlash/>
+                  <EyeClosedIcon/>
                 )}
               </button>
             }
