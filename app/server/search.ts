@@ -27,7 +27,7 @@ export async function getShadows(
   try {
     const output= await sql`
       SELECT * FROM lg_shadows WHERE
-        name LIKE ${"%" + (query.search ?? "").trim() + "%"}
+        LOWER(name) LIKE ${"%" + (query.search ?? "").trim().toLowerCase() + "%"}
         ${query.level != undefined ? sql`AND category = ${resolveCategoryName(query.level, index)}` : sql``} 
         ${query.subject != undefined ? sql`AND subject = ${query.subject}` : sql``}
         ${query.docType != undefined ? sql`AND doc_type = ${resolveDocTypeName(query.docType, index)}` : sql``}
