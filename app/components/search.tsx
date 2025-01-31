@@ -1,6 +1,6 @@
 import type {LGDPReducerAction, LGDUnification, LibGSNIndex} from "~/util/doc-details";
 import React, {type ActionDispatch} from "react";
-import {Autocomplete, AutocompleteItem, Input} from "@nextui-org/react";
+import {Autocomplete, AutocompleteItem, Input} from "@heroui/react";
 import type {Key} from "@react-types/shared";
 
 function createAutocompleteItem<T extends Key>(value: T) {

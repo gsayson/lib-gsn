@@ -7,7 +7,7 @@ import {
   ModalFooter,
   ModalHeader, Textarea,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import type {LibGSNIndex} from "~/util/doc-details";
 import {useState} from "react";
 import {AuthenticityTokenInput} from "remix-utils/csrf/react";

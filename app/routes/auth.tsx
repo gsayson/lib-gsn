@@ -1,4 +1,4 @@
-import {Alert, Button, Form, Input} from "@nextui-org/react";
+import {Alert, Button, Form, Input} from "@heroui/react";
 import {type FormEvent, useState} from "react";
 import {EyeOpenIcon, EyeClosedIcon} from "@radix-ui/react-icons";
 import {AuthenticityTokenInput} from "remix-utils/csrf/react";
@@ -24,7 +24,7 @@ export function meta() {
 export async function loader({request}: Route.LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   // check if we're already authenticated
-  if(NULL_SVR !== await validateSessionObject(session)) {
+  if(NULL_SVR !== (await validateSessionObject(session))) {
     return redirect("/portal");
   }
   return data({ error: session.get("error") }, {

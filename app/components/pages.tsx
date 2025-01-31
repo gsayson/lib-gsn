@@ -1,6 +1,6 @@
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem} from "@nextui-org/react";
+import {Navbar, NavbarBrand, NavbarContent, NavbarItem} from "@heroui/react";
 import {Link, type Location, useLocation} from "react-router";
-import {useTheme} from "@nextui-org/use-theme";
+import {useTheme} from "@heroui/use-theme";
 import {MoonIcon, SunIcon} from "@radix-ui/react-icons";
 import React from "react";
 import {ClientOnly} from "remix-utils/client-only";

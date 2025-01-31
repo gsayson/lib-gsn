@@ -1,4 +1,4 @@
-import {Card, CardBody, CardFooter, CardHeader, Divider, Pagination} from "@nextui-org/react";
+import {Card, CardBody, CardFooter, CardHeader, Divider, Pagination, Spinner} from "@heroui/react";
 import {DownloadIcon} from "@radix-ui/react-icons";
 import {Await, Link, useFetcher} from "react-router";
 import {type LGDUnification, type LibGSNIndex, resolveCategoryKey, resolveDocTypeNumerical} from "~/util/doc-details";
@@ -70,7 +70,9 @@ export function LGSearchResultList({state, index, cdnBase}: {state: LGDUnificati
     ))
   }, [state])
   return (
-    <Suspense fallback={<p>Loading</p>}>
+    <Suspense fallback={
+      <div className={"justify-center flex w-full"}><Spinner size="lg"/></div>
+    }>
       <Await resolve={promise}>
         {() => {
           const chunked = chunkArray(fetcher.data ?? [], 10)

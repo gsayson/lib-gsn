@@ -13,7 +13,7 @@ import {
 import type { Route } from "./+types/root";
 import stylesheet from "./app.css?url";
 import React from "react";
-import {NextUIProvider} from "@nextui-org/react";
+import {HeroUIProvider} from "@heroui/react";
 import {LGNavbar} from "~/components/pages";
 import {csrf} from "~/server/csrf";
 import {AuthenticityTokenProvider} from "remix-utils/csrf/react";
@@ -80,9 +80,9 @@ export default function App() {
   const navigate = useNavigate();
   return (
     <AuthenticityTokenProvider token={token}>
-      <NextUIProvider navigate={(to, routerOptions) => navigate(to, routerOptions)} useHref={useHref}>
+      <HeroUIProvider navigate={(to, routerOptions) => navigate(to, routerOptions)} useHref={useHref}>
         <Outlet/>
-      </NextUIProvider>
+      </HeroUIProvider>
     </AuthenticityTokenProvider>
   );
 }
