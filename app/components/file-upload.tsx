@@ -5,7 +5,7 @@ import {
   ModalBody,
   ModalContent,
   ModalFooter,
-  ModalHeader, Textarea,
+  ModalHeader, Skeleton, Textarea,
   useDisclosure,
 } from "@heroui/react";
 import type {LibGSNIndex} from "~/util/doc-details";
@@ -15,7 +15,8 @@ import {useFetcher} from "react-router";
 
 export function FileUploadModal({ index }: { index: LibGSNIndex}) {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
-  const [currentCategory, setCurrentCategory] = useState<string | undefined>()
+  const [currentCategory, setCurrentCategory] = useState<string | undefined>();
+  const [loading, setLoading] = useState(false);
   const fetcher = useFetcher();
   return (
     <>
@@ -25,16 +26,18 @@ export function FileUploadModal({ index }: { index: LibGSNIndex}) {
       <Modal isOpen={isOpen} placement="top-center" onOpenChange={onOpenChange} backdrop={"blur"} isDismissable={false}>
         <Form validationBehavior={"native"}
         action={async (e) => {
+          setLoading(true);
           await fetcher.submit(e, {
             method: "post",
             encType: "multipart/form-data",
             action: "/science/upload",
             preventScrollReset: true,
           });
+          setLoading(false);
         }}>
           <ModalContent>
             {(onClose) => (
-              <>
+              <Skeleton isLoaded={!loading}>
                 <ModalHeader className="flex flex-col gap-1">Create new upload</ModalHeader>
                 <ModalBody>
                   <input
@@ -115,11 +118,11 @@ export function FileUploadModal({ index }: { index: LibGSNIndex}) {
                   }} className={"font-bold"}>
                     Close
                   </Button>
-                  <Button color="primary" type={"submit"} className={"font-bold"}>
+                  <Button color="primary" type={"submit"} className={"font-bold"} isDisabled={fetcher.state === "submitting"}>
                     Upload
                   </Button>
                 </ModalFooter>
-              </>
+              </Skeleton>
             )}
           </ModalContent>
         </Form>

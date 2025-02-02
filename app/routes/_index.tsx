@@ -20,7 +20,7 @@ export default function Home() {
           </Link> project.</p>
         <h1 className={"text-4xl md:text-6xl mt-2 lg:mt-4 font-serif"}>
           Because
-          {" "}<span className={"font-bold text-amber-600 dark:text-amber-500"}>the best things in life are free</span>,
+          {" "}<span className={"text-amber-600 dark:text-amber-500"}>the best things in life are free</span>,
           and learning is one of them
         </h1>
         <p className="text-xl md:text-2xl my-4 text-default-400 dark:text-default-300">

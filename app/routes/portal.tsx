@@ -61,7 +61,22 @@ export default function Portal() {
             <Button className={"font-bold w-full"} color={"primary"}
                     onPress={() => setNewQuery(state)}>Submit search query</Button>
             <Divider/>
-            <FileUploadModal index={index}/>
+            <Suspense fallback={
+              <Skeleton className={"w-full"}/>
+            }>
+              <Await resolve={index}>
+                {x => {
+                  let index = x;
+                  if(index == undefined) {
+                    index = {
+                      categories: [],
+                      doctype: []
+                    };
+                  }
+                  return <FileUploadModal index={index}/>;
+                }}
+              </Await>
+            </Suspense>
             <Button
               className={"font-bold w-full"} color={"danger"}
               onPress={async () => {
