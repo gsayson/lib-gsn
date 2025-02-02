@@ -1,4 +1,4 @@
-import {Alert, Button, Skeleton} from "@heroui/react";
+import {Alert, Button} from "@heroui/react";
 import {LGSearchResultList} from "~/components/listing";
 import {type LGDUnification, useDDReducer} from "~/util/doc-details";
 import {getIndex} from "~/server/search";
@@ -31,7 +31,7 @@ export default function Library() {
       <div className="lg:flex gap-4 w-full space-y-6 lg:space-y-0 lg:space-x-4">
         <search className={"w-full lg:max-w-xs"}>
           <Suspense fallback={
-            <Skeleton className={"w-full"}/>
+            <DocDetails state={state} dispatch={dispatch} lgi={{categories: [], doctype: []}}/>
           }>
             <Await resolve={index}>
               {x => {
@@ -62,9 +62,7 @@ export default function Library() {
         </search>
         <section className={"space-y-4 w-full max-w-3xl"}>
           <ClientOnly>{() =>
-            <Suspense fallback={
-              <Skeleton className={"w-full"}/>
-            }>
+            <Suspense fallback={null}>
               <Await resolve={index}>
                 {x => {
                   let index = x;
